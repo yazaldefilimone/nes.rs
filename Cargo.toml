@@ -1,8 +1,21 @@
 [package]
+authors = ["Yazalde Filimone <yazaldefilimon@gmail.com>"]
 name = "nintendo-system"
 version = "0.1.0"
 edition = "2021"
+description = "A nintendo entertainment system (aka NES) emulator"
+license = "MIT"
+
+[[bin]]
+name = "nes"
+path = "src/main.rs"
+
+[lib]
+name = "nes"
+path = "src/lib.rs"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
 
 [dependencies]
