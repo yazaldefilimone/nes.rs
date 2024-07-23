@@ -39,9 +39,8 @@ impl CPU {
       let opcode = Opcode::from_u8(opscode).expect("Unrecognized opcode");
       match opcode {
         Opcode::LDA => self.load_accumulator(program),
-        Opcode::BRK => {
-          return self.force_interrupt();
-        }
+        // force interrupt
+        Opcode::BRK => return,
         Opcode::TAX => self.transfer_accumulator_to_x(),
         Opcode::INX => self.increment_register(),
         _ => {
@@ -55,41 +54,29 @@ impl CPU {
     let value = program[self.program_counter as usize];
     self.program_counter += 1;
     self.register_a = value;
-
-    if self.register_a == 0 {
-      self.status |= 0b0000_0010; // Set zero flag if A is zero
-    } else {
-      self.status &= 0b1111_1101; // Clear zero flag if A is not zero
-    }
-    // Check if bit 7 is set
-    if self.register_a & 0b1000_0000 != 0 {
-      self.status |= 0b1000_0000; // Set negative flag if bit 7 is set
-    } else {
-      self.status &= 0b0111_1111; // Clear negative flag if bit 7 is not set
-    }
+    self.update_zero_and_negative_flags(self.register_a);
   }
 
   pub fn transfer_accumulator_to_x(&mut self) {
     self.register_x = self.register_a;
-
-    if self.register_x == 0 {
-      self.status |= 0b0000_0010; // Set zero flag if A is zero
-    } else {
-      self.status &= 0b1111_1101; // Clear zero flag if A is not zero
-    }
-    // Check if bit 7 is set
-    if self.register_x & 0b1000_0000 != 0 {
-      self.status |= 0b1000_0000; // Set negative flag if bit 7 is set
-    } else {
-      self.status &= 0b0111_1111; // Clear negative flag if bit 7 is not set
-    }
+    self.update_zero_and_negative_flags(self.register_x);
   }
 
   pub fn increment_register(&mut self) {
     self.register_x = self.register_x.wrapping_add(1);
   }
 
-  pub fn force_interrupt(&mut self) {
-    return;
+  pub fn update_zero_and_negative_flags(&mut self, register: u8) {
+    if register == 0 {
+      self.status |= 0b0000_0010; // Set zero flag if A is zero
+    } else {
+      self.status &= 0b1111_1101; // Clear zero flag if A is not zero
+    }
+    // Check if bit 7 is set
+    if register & 0b1000_0000 != 0 {
+      self.status |= 0b1000_0000; // Set negative flag if bit 7 is set
+    } else {
+      self.status &= 0b0111_1111; // Clear negative flag if bit 7 is not set
+    }
   }
 }
