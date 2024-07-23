@@ -1,3 +1,5 @@
+<samp>
+
 ### Nintendo System
 
 A Nintendo Entertainment System (NES) emulator written in Rust.
