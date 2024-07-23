@@ -3,7 +3,7 @@ use nes::cpu::CPU;
 fn test_0xa9_lda_immediate_load_data() {
   let mut cpu = CPU::default();
   let program = vec![0xa9, 0x05, 0x00];
-  cpu.boot(program);
+  cpu.boot(program, true);
   assert_eq!(cpu.register_a, 0x05);
   assert!(cpu.status & 0b0000_0010 == 0b00);
   assert!(cpu.status & 0b1000_0000 == 0);
@@ -13,7 +13,7 @@ fn test_0xa9_lda_immediate_load_data() {
 fn test_0xa9_lda_zero_flag() {
   let mut cpu = CPU::default();
   let program = vec![0xa9, 0x00, 0x00];
-  cpu.boot(program);
+  cpu.boot(program, true);
   assert!(cpu.status & 0b0000_0010 == 0b10);
 }
 
@@ -22,21 +22,21 @@ fn test_0xaa_tax_move_a_to_x() {
   let mut cpu = CPU::default();
   cpu.register_a = 10;
   let program = vec![0xaa, 0x00];
-  cpu.boot(program);
+  cpu.boot(program, false);
   assert_eq!(cpu.register_x, 10)
 }
 
-// #[test]
-// fn test_5_ops_working_together() {
-//   let mut cpu = CPU::default();
-//   cpu.boot(vec![0xa9, 0xc0, 0xaa, 0xe8, 0x00]);
-//   assert_eq!(cpu.register_x, 0xc1)
-// }
+#[test]
+fn test_5_ops_working_together() {
+  let mut cpu = CPU::new();
+  cpu.boot(vec![0xa9, 0xc0, 0xaa, 0xe8, 0x00], true);
+  assert_eq!(cpu.register_x, 0xc1)
+}
 
-// #[test]
-// fn test_inx_overflow() {
-//   let mut cpu = CPU::default();
-//   cpu.register_x = 0xff;
-//   cpu.boot(vec![0xe8, 0xe8, 0x00]);
-//   assert_eq!(cpu.register_x, 1)
-// }
+#[test]
+fn test_inx_overflow() {
+  let mut cpu = CPU::new();
+  cpu.register_x = 0xff;
+  cpu.boot(vec![0xe8, 0xe8, 0x00], false);
+  assert_eq!(cpu.register_x, 1)
+}

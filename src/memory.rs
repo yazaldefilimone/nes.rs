@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub struct Memory {
   pub ram: [u8; 0xFFFF],
   pub start_address: usize,
@@ -14,13 +16,12 @@ impl Memory {
     self.ram[address as usize] = value;
   }
 
-  pub fn load_program(&mut self, program: Vec<u8>) -> u16 {
+  pub fn load_program(&mut self, program: &Vec<u8>) -> u16 {
     // let start_address: usize = 0x8000;
     // Load program into memory starting at 0x8000
-    for (i, &byte) in program.iter().enumerate() {
-      self.ram[self.start_address + i] = byte;
+    for (index, &byte) in program.iter().enumerate() {
+      self.ram[self.start_address + index] = byte;
     }
-    // self.ram[self.start_address..(self.start_address + program.len ())].copy_from_slice(&program[..]);
     // Set the program counter to the start address of the program
     self.write_u16(0xFFFC, self.start_address as u16);
     // Return the start address of the program
