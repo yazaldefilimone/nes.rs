@@ -4,7 +4,7 @@
 
 A Nintendo Entertainment System (NES) emulator written in Rust.
 
-Architecture (Distribute Systems)
+Architecture (distributed system)
 
 ```plaintext
 
