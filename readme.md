@@ -4,6 +4,21 @@
 
 A Nintendo Entertainment System (NES) emulator written in Rust.
 
+Architecture (Distribute Systems)
+
+```plaintext
+
++--------+     +--------+     +--------+     +--------+     +--------+     +--------+
+|  CPU   |<--> |  BUS   |<--> | ROM    |<--> |  PPU   |<--> | GamePad|<--> |  APU   |
++--------+     +--------+     +--------+     +--------+     +--------+     +--------+
+                                  |              |              |
+                                  v              v              v
+                              +-------+     +--------+      +--------+
+                              | Logic |     | Render |      | Scroll |
+                              +-------+     +--------+      +--------+
+
+```
+
 Features
 
 - CPU
@@ -52,3 +67,7 @@ Features
     - [ ] Sprite Collision
     - [ ] Sprite Overflow
 - [ ] APU
+
+Links
+
+- https://www.nesdev.org/obelisk-6502-guide/reference.html
